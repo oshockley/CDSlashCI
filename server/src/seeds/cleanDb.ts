@@ -20,3 +20,5 @@ export default async (modelName: 'Question', collectionName: string) => {
     throw err;
   }
 };
+
+//changed err
