@@ -17,6 +17,7 @@ export default async (modelName: 'Question', collectionName: string) => {
       await db.dropCollection(collectionName);
     }
   } catch (err) {
+    console.error('Error in cleanDb:', err); // Added this line
     throw err;
   }
 };
