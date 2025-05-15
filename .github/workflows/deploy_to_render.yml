@@ -1,27 +1,29 @@
-name: Deploy To Render
+name: Deploy to Render
+env:
+  deploy_url: ${{ secrets.RENDER_DEPLOY_ }}
 
+# Run Deployment post closing
 on:
-  push:
-    branches: [main]
   pull_request:
+    types: closed
     branches:
-      - main
+      - main # Run deploy after pushed to main
 
 jobs:
-  ci:
-    name: Deploy To Render
+  render-deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
     steps:
-      - uses: actions/checkout@v4
-      - name: Test
-        run: |
-          npm install
-          npm run test
-
-      - name: Deploy
-        # Only run this step if the branch is main
-        if: github.ref == 'refs/heads/main'
-        env:
-          deploy_url: ${{ secrets.RENDER_DEPLOY_ }}
-        run: |
-          curl -X GET "$deploy_url"
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: CI and CD using Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: install dependencies
+        run: npm ci
+      - name: Render Deploy Action
+        run: curl "$deploy_url
