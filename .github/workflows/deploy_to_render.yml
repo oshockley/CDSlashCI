@@ -24,4 +24,4 @@ jobs:
         env:
           deploy_url: ${{ secrets.RENDER_DEPLOY_ }}
         run: |
-          curl "$deploy_url"
+          curl -X GET "$deploy_url"
