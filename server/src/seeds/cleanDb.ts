@@ -18,4 +18,4 @@ export default async (modelName: "Question", collectionName: string) => {
 }
 
 
-//changed err
+//changed error
