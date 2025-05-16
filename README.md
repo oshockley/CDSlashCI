@@ -76,7 +76,7 @@ jobs:
           build: npm run build
           start: npm run start
           component: true #Should run Component testing
-
+```
 Link to Deployed Application: https://cdslashci.onrender.com
 ![Screenshot (2127)](https://github.com/user-attachments/assets/bd01a4e8-a417-4a7c-a20e-991a89afa206)
 
