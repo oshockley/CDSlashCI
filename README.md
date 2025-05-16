@@ -46,26 +46,33 @@ The pipeline is designed to:
 Create a file: `.github/workflows/test.yml`
 
 ```yaml
-name: Run Cypress Tests
+name: Pull Request on Develop Branch
 
+# Run tests for PRs to Develop branch
 on:
   pull_request:
-    branches: [develop]
+    branches:
+      - develop # Run tests for PRs against develop branch
 
 jobs:
-  cypress-run:
+  test-runner:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: CI and CD using Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run Cypress tests
-        run: npx cypress run
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: install dependencies
+        run: npm ci
+      - name: Cypress run component tests
+        uses: cypress-io/github-action@v6
+        with:
+          build: npm run build
+          start: npm run start
+          component: true #Should run Component testing
